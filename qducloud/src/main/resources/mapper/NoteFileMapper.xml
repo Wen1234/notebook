@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.qducloud.mapper.work.NoteFileMapper">
+	
+	<sql id="nt_columns">
+		id,author,comment,content,content_short,display_time,title,is_active
+	</sql>
+	
+	<resultMap type="org.qducloud.bean.NoteFile" id="nt_map">
+		<id column="id" property="id"/>
+		<result column="author" property="author"/>
+		<result column="comment" property="comment"/>
+		<result column="content" property="content"/>
+		<result column="content_short" property="content_short"/>
+		<result column="display_time" property="display_time"/>
+		<result column="title" property="title"/>
+		<result column="is_active" property="is_active"/>
+	</resultMap>
+	
+	<select id="findNoteFileById" resultMap="nt_map" parameterType="string">
+		select
+		 <include refid="nt_columns"/> 
+		from nt_note_file
+			where id = #{id}  
+	</select>
+	<select id="findAll" resultMap="nt_map" parameterType="string">
+		select
+		 <include refid="nt_columns"/> 
+		from nt_note_file where is_active = true
+	</select>
+	<insert id="addNoteFile" parameterType="org.qducloud.bean.NoteFile">
+		insert into
+		      nt_note_file(<include refid="nt_columns" />)
+		values(uuid(),#{author},#{comment},#{content},#{content_short},now(),#{title},true)
+	</insert>
+	<update id="updateNoteFile" parameterType="org.qducloud.bean.NoteFile">
+		update nt_note_file set id = #{id},author = #{author},comment = #{comment},content = #{content},content_short = #{content_short},title = #{title},is_active = #{is_active}
+		where id = #{id}
+	</update>
+	<update id="deleteNoteFile" parameterType="org.qducloud.bean.NoteFile">
+		update nt_note_file set is_active = false
+		where id = #{id}
+	</update>
+
+<!-- 	<select id="selectPage" parameterType="int" resultMa p="account_map">
+		select 	 
+			<include refid="account_columns" />
+		from
+		    et_user limit ${start},${end}
+	</select>
+	 -->
+</mapper>

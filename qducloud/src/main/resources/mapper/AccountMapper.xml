@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.qducloud.mapper.sys.AccountMapper">
+	
+	<sql id="account_columns">
+		id,user_name,password,user_id,role_id
+	</sql>
+	
+	<resultMap type="org.qducloud.bean.Account" id="account_map">
+		<id column="id" property="id"/>
+		<result column="user_name" property="userName"/>
+		<result column="password" property="password"/>
+		<result column="user_id" property="uid"/>
+		<result column="role_id" property="rid"/>
+	</resultMap>
+	
+	<select id="findAccountUserName" resultMap="account_map" parameterType="string">
+		select
+		 <include refid="account_columns"/> 
+		from sys_account
+			where user_name = #{userName}  
+	</select>
+	<insert id="addAccount" parameterType="org.qducloud.bean.Account">
+		insert into
+		      sys_account(<include refid="account_columns" />)
+		values(uuid(),#{userName},#{password},#{uid},
+		       #{rid})
+	</insert>
+
+<!-- 	<select id="selectPage" parameterType="int" resultMa p="account_map">
+		select 
+			<include refid="account_columns" />
+		from
+		    et_user limit ${start},${end}
+	</select>
+	 -->
+</mapper>
